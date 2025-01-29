@@ -21,7 +21,6 @@ public class LivroDAO implements InterfaceDAO<Livro> {
                     "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
                     "titulo VARCHAR(255) NOT NULL, " +
                     "autor VARCHAR(255) NOT NULL, " +
-                    "preco DOUBLE NOT NULL, " +
                     "quantidade INT NOT NULL)";
 
             try (Connection connection = JdbcConnection.getConnection();
@@ -49,13 +48,12 @@ public class LivroDAO implements InterfaceDAO<Livro> {
     @Override
     public void inserir(Livro livro) throws SQLException {
         try {
-            String insertSql = "INSERT INTO livro (titulo, autor, preco, quantidade) VALUES (?, ?, ?, ?)";
+            String insertSql = "INSERT INTO livro (titulo, autor, quantidade) VALUES (?, ?, ?)";
             try (Connection connection = JdbcConnection.getConnection();
                  PreparedStatement stmt = connection.prepareStatement(insertSql)) {
                 stmt.setString(1, livro.getTitulo());
                 stmt.setString(2, livro.getAutor());
-                stmt.setDouble(3, livro.getPreco());
-                stmt.setDouble(4, livro.getQuantidade());
+                stmt.setDouble(3, livro.getQuantidade());
                 stmt.executeUpdate();
             }
               
@@ -77,7 +75,6 @@ public class LivroDAO implements InterfaceDAO<Livro> {
                     livro.setId(rs.getLong("id"));
                     livro.setTitulo(rs.getString("titulo"));
                     livro.setAutor(rs.getString("autor"));
-                    livro.setPreco(rs.getDouble("preco"));
                     livro.setQuantidade(rs.getInt("quantidade"));
                     return livro;
                 } else {
@@ -103,7 +100,6 @@ public class LivroDAO implements InterfaceDAO<Livro> {
                     livro.setId(rs.getLong("id"));
                     livro.setTitulo(rs.getString("titulo"));
                     livro.setAutor(rs.getString("autor"));
-                    livro.setPreco(rs.getDouble("preco"));
                     livro.setQuantidade(rs.getInt("quantidade"));
                     livros.add(livro);
                 }
@@ -117,14 +113,13 @@ public class LivroDAO implements InterfaceDAO<Livro> {
     @Override
     public void atualizar(Livro livro) throws SQLException {
         try {
-            String updateSql = "UPDATE livro SET titulo = ?, autor = ?, preco = ?, quantidade = ? WHERE id = ?";
+            String updateSql = "UPDATE livro SET titulo = ?, autor = ?, quantidade = ? WHERE id = ?";
             try (Connection connection = JdbcConnection.getConnection();
                  PreparedStatement stmt = connection.prepareStatement(updateSql)) {
                 stmt.setString(1, livro.getTitulo());
                 stmt.setString(2, livro.getAutor());
-                stmt.setDouble(3, livro.getPreco());
-                stmt.setDouble(4, livro.getQuantidade());
-                stmt.setLong(5, livro.getId());
+                stmt.setDouble(3, livro.getQuantidade());
+                stmt.setLong(4, livro.getId());
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
